@@ -13,6 +13,21 @@
         android:theme="@style/Theme.SistemaHUOC"
         tools:targetApi="31">
         <activity
+            android:name=".Paciente_itemActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Novos_PacientesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdministradorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MedicoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EnfermeiroActivity"
+            android:exported="false" />
+        <activity
             android:name=".CadastroActivity"
             android:exported="false" />
         <activity

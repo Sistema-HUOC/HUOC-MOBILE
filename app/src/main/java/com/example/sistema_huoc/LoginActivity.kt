@@ -1,5 +1,6 @@
 package com.example.sistema_huoc
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -8,11 +9,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
+
+    lateinit var botaoEntrar: Button
+    lateinit var campoEmail: EditText
+    lateinit var campoSenha: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,37 +27,28 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        val emailEditText = findViewById<EditText>(R.id.editTextEmail)
-        val senhaEditText = findViewById<EditText>(R.id.editTextSenha)
-        val loginButton = findViewById<Button>(R.id.btnLogin)
+        botaoEntrar = findViewById(R.id.btnLogin)
+        campoEmail = findViewById(R.id.editTextEmail)
+        campoSenha = findViewById(R.id.editTextSenha)
 
-        loginButton.setOnClickListener {
-            val email = emailEditText.text.toString().trim()
-            val senha = senhaEditText.text.toString().trim()
+        botaoEntrar.setOnClickListener {
+            val email = campoEmail.text.toString().trim()
+            val senha = campoSenha.text.toString()
 
-            if (email.isEmpty() || senha.isEmpty()) {
-                Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            when (email) {
+                "admin@email.com" -> {
+                   // startActivity(Intent(this, AdminActivity::class.java))
+                }
+                "medico@email.com" -> {
+                    startActivity(Intent(this, MedicoActivity::class.java))
+                }
+                "enfermeiro@email.com" -> {
+                    startActivity(Intent(this, EnfermeiroActivity::class.java))
+                }
+                else -> {
+                    Toast.makeText(this, "Email não reconhecido", Toast.LENGTH_SHORT).show()
+                }
             }
-
-            val request = LoginRequest(email, senha)
-
-            RetrofitInstance.api.login(request).enqueue(object : Callback<LoginResponse> {
-                override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                    if (response.isSuccessful) {
-                        val resultado = response.body()
-                        Toast.makeText(this@LoginActivity, "Bem-vindo, ${resultado?.nome}", Toast.LENGTH_LONG).show()
-                        // Aqui você pode navegar pra outra tela, por exemplo:
-                        // startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                    } else {
-                        Toast.makeText(this@LoginActivity, "Login inválido", Toast.LENGTH_LONG).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    Toast.makeText(this@LoginActivity, "Erro: ${t.message}", Toast.LENGTH_LONG).show()
-                }
-            })
         }
     }
 }
